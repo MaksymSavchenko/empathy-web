@@ -142,10 +142,10 @@ const App = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-            <button className="flex items-center justify-center bg-[#1c1c1e] border border-white/10 px-4 py-2 rounded-2xl hover:bg-[#2c2c2e] transition-all">
+            <button className="flex items-center justify-center bg-[#1c1c1e] border border-white/10 px-4 py-2 rounded-2xl hover:bg-[#2c2c2e] transition-all cursor-pointer">
               <img src="/iOS_store.svg" className="h-12 w-auto" alt="Download on the App Store" />
             </button>
-            <button className="flex items-center justify-center bg-[#1c1c1e] border border-white/10 px-4 py-2 rounded-2xl hover:bg-[#2c2c2e] transition-all">
+            <button className="flex items-center justify-center bg-[#1c1c1e] border border-white/10 px-4 py-2 rounded-2xl hover:bg-[#2c2c2e] transition-all cursor-pointer">
               <img src="/android_play.svg" className="h-12 w-auto" alt="Get it on Google Play" />
             </button>
           </div>
