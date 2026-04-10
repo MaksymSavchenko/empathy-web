@@ -160,9 +160,8 @@ const App = () => {
       </section>
 
       {/* App Screenshot Grid - Emulating "For Today" section */}
-      <section id="features" className="px-6 py-20 bg-gradient-to-b from-transparent to-purple-900/10">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold mb-12 text-center">Powerful Tools at Your Fingertips</h2>
+      <section id="features" className="px-6 py-20 max-w-7xl mx-auto bg-gradient-to-b from-transparent to-purple-900/10 rounded-[2rem]">
+        <h2 className="text-3xl font-bold mb-12 text-center">Powerful Tools at Your Fingertips</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <FeatureCard 
               title="Check In" 
@@ -189,7 +188,6 @@ const App = () => {
               color="bg-purple-400" 
             />
           </div>
-        </div>
       </section>
 
       {/* Library Highlights */}
@@ -235,14 +233,16 @@ const App = () => {
       </section>
 
       {/* Privacy Message */}
-      <section id="privacy" className="px-8 py-10 bg-[#1c1c1e] max-w-7xl mx-auto rounded-[2rem] mb-16">
-        <div className="flex items-center gap-6">
-          <Logo size={64} pulsing={false} />
-          <div>
-            <h2 className="text-2xl font-bold mb-2">Your data is yours.</h2>
-            <p className="text-gray-400 text-base">
-              Empath was built with privacy at its core. We don't track you, we don't sell your data, and we don't even have access to your journal entries. Everything stays on your device.
-            </p>
+      <section id="privacy" className="max-w-7xl mx-auto px-6 mb-16">
+        <div className="px-6 py-10 bg-[#1c1c1e] rounded-[2rem]">
+          <div className="max-w-4xl flex items-center gap-6">
+            <Logo size={64} pulsing={false} />
+            <div>
+              <h2 className="text-2xl font-bold mb-2">Your data is yours.</h2>
+              <p className="text-gray-400 text-base">
+                Empath was built with privacy at its core. We don't track you, we don't sell your data, and we don't even have access to your journal entries. Everything stays on your device.
+              </p>
+            </div>
           </div>
         </div>
       </section>
