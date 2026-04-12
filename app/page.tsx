@@ -325,7 +325,7 @@ const BreathingExercise = () => {
               </p>
               
               {/* Discount Code */}
-              <div className="bg-white/10 rounded-2xl p-6 border border-white/20">
+              <div className="bg-black rounded-2xl p-6 border border-white/20">
                 <p className="text-white/60 text-sm mb-3 text-center">Your discount code:</p>
                 <button
                   onClick={handleCopyCode}
