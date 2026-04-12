@@ -77,9 +77,12 @@ const LiquidGlassCard = ({ children, className = '' }: { children: React.ReactNo
 // Breathing Exercise Component
 const BreathingExercise = () => {
   const [phase, setPhase] = useState<'inhale' | 'hold1' | 'exhale' | 'hold2'>('inhale');
-  const [totalTimeRemaining, setTotalTimeRemaining] = useState(300); // 5 minutes
+  const [totalTimeRemaining, setTotalTimeRemaining] = useState(20); // 20 seconds for testing
   const [isBreathing, setIsBreathing] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+  const [showCompletionModal, setShowCompletionModal] = useState(false);
+  const [hasShownModal, setHasShownModal] = useState(false);
+  const [copiedCode, setCopiedCode] = useState(false);
   
   const phaseStartTimeRef = useRef<number>(0);
   const phaseRef = useRef<'inhale' | 'hold1' | 'exhale' | 'hold2'>('inhale');
@@ -105,7 +108,7 @@ const BreathingExercise = () => {
       const now = Date.now();
       phaseStartTimeRef.current = now;
       sessionStartTimeRef.current = now;
-      setTotalTimeRemaining(300);
+      setTotalTimeRemaining(20);
     }
   };
 
@@ -137,12 +140,17 @@ const BreathingExercise = () => {
       
       // Update Timer
       const totalElapsedSeconds = Math.floor((now - sessionStartTimeRef.current) / 1000);
-      const remainingSeconds = Math.max(0, 300 - totalElapsedSeconds);
+      const remainingSeconds = Math.max(0, 20 - totalElapsedSeconds);
       
       setTotalTimeRemaining((prev) => {
         if (remainingSeconds !== prev) {
            if (remainingSeconds === 0) {
              setBreathingState(false);
+             // Show completion modal only once per session
+             if (!hasShownModal) {
+               setHasShownModal(true);
+               setShowCompletionModal(true);
+             }
            }
            return remainingSeconds;
         }
@@ -231,6 +239,20 @@ const BreathingExercise = () => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const handleCloseModal = () => {
+    setShowCompletionModal(false);
+  };
+
+  const handleCopyCode = async () => {
+    try {
+      await navigator.clipboard.writeText('breath10');
+      setCopiedCode(true);
+      setTimeout(() => setCopiedCode(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy code:', err);
+    }
+  };
+
   return (
     <div 
       className="relative flex items-center justify-center cursor-pointer focus:outline-none"
@@ -276,6 +298,51 @@ const BreathingExercise = () => {
         <div className="absolute w-32 h-32 flex flex-col items-center justify-center text-white pointer-events-none" aria-live="polite">
           <div className="text-2xl font-bold mb-1">{getPhaseText()}</div>
           <div className="text-sm mt-1 opacity-60" role="timer" aria-label="Time remaining">{formatTime(totalTimeRemaining)}</div>
+        </div>
+      )}
+
+      {/* Completion Modal */}
+      {showCompletionModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm">
+          <div className="relative bg-gradient-to-br from-purple-900/90 to-purple-800/90 rounded-3xl p-8 max-w-md w-full mx-4 shadow-[0_0_60px_rgba(147,51,234,0.5)] border border-purple-500/30">
+            {/* Close button */}
+            <button
+              onClick={handleCloseModal}
+              className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors"
+              aria-label="Close modal"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Content */}
+            <div className="text-center">
+              <h2 className="text-3xl font-bold text-white mb-4">Well Done!</h2>
+              <p className="text-white/80 text-lg mb-6">
+                Thank you for completing your breathing exercise session
+              </p>
+              
+              {/* Discount Code */}
+              <div className="bg-white/10 rounded-2xl p-6 border border-white/20">
+                <p className="text-white/60 text-sm mb-3 text-center">Your discount code:</p>
+                <button
+                  onClick={handleCopyCode}
+                  className="flex items-center justify-center gap-3 bg-white/20 hover:bg-white/30 transition-all rounded-xl px-6 py-4 cursor-pointer group w-full mx-auto max-w-xs"
+                  aria-label="Copy discount code"
+                >
+                  <span className="text-2xl font-bold text-white font-mono tracking-wider">breath10</span>
+                  {copiedCode ? (
+                    <span className="text-green-400 text-sm font-medium">Copied!</span>
+                  ) : (
+                    <svg className="w-5 h-5 text-white/60 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
