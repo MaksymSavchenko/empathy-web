@@ -9,7 +9,8 @@ import {
   ChevronRight, 
   Smile, 
   RefreshCcw, 
-  Wind
+  Wind,
+  X
 } from 'lucide-react';
 
 // Liquid Glass Card Component with mouse-tracking spotlight
@@ -308,7 +309,7 @@ const BreathingExercise = () => {
             {/* Close button */}
             <button
               onClick={handleCloseModal}
-              className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors"
+              className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors cursor-pointer"
               aria-label="Close modal"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -349,6 +350,200 @@ const BreathingExercise = () => {
   );
 };
 
+// Device detection utility
+const getDeviceType = (): 'ios' | 'android' | 'desktop' => {
+  if (typeof window === 'undefined') return 'desktop';
+  
+  const userAgent = navigator.userAgent.toLowerCase();
+  
+  // iOS detection
+  if (/iphone|ipad|ipod/.test(userAgent)) {
+    return 'ios';
+  }
+  
+  // Android detection
+  if (/android/.test(userAgent)) {
+    return 'android';
+  }
+  
+  return 'desktop';
+};
+
+// Ripple Button Component
+const RippleButton = ({ children, onClick, className = '' }: { children: React.ReactNode; onClick?: () => void; className?: string }) => {
+  const [ripplePosition, setRipplePosition] = useState<{ x: number; y: number } | null>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!buttonRef.current) return;
+    
+    const rect = buttonRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    setRipplePosition({ x, y });
+    
+    setTimeout(() => setRipplePosition(null), 600);
+    
+    if (onClick) onClick();
+  };
+
+  return (
+    <button
+      ref={buttonRef}
+      onClick={handleClick}
+      className={`relative overflow-hidden cursor-pointer ${className}`}
+    >
+      {ripplePosition && (
+        <span
+          className="absolute bg-white/30 rounded-full animate-ping"
+          style={{
+            left: ripplePosition.x,
+            top: ripplePosition.y,
+            width: '100px',
+            height: '100px',
+            transform: 'translate(-50%, -50%)',
+            animation: 'ripple 0.6s ease-out forwards'
+          }}
+        />
+      )}
+      {children}
+    </button>
+  );
+};
+
+// Liquid Glass Button Component with ripple effect and mouse-tracking spotlight
+const LiquidGlassButton = ({ children, onClick, className = '' }: { children: React.ReactNode; onClick?: () => void; className?: string }) => {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [ripplePosition, setRipplePosition] = useState<{ x: number; y: number } | null>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!buttonRef.current) return;
+    const rect = buttonRef.current.getBoundingClientRect();
+    setMousePosition({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!buttonRef.current) return;
+    
+    const rect = buttonRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    setRipplePosition({ x, y });
+    
+    setTimeout(() => setRipplePosition(null), 600);
+    
+    if (onClick) onClick();
+  };
+
+  return (
+    <button
+      ref={buttonRef}
+      onClick={handleClick}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+      className={`relative overflow-hidden backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl transition-all duration-500 ease-out cursor-pointer ${className}`}
+      style={{
+        boxShadow: isHovering 
+          ? '0 25px 50px -12px rgba(147, 51, 234, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)' 
+          : '0 10px 30px -10px rgba(0, 0, 0, 0.3)',
+      }}
+    >
+      {/* Glass shine effect following cursor */}
+      <div
+        className="absolute pointer-events-none transition-opacity duration-300"
+        style={{
+          width: 300,
+          height: 300,
+          background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(147,51,234,0.1) 40%, transparent 70%)',
+          left: mousePosition.x - 150,
+          top: mousePosition.y - 150,
+          opacity: isHovering ? 1 : 0,
+          transform: 'translate3d(0,0,0)',
+          filter: 'blur(40px)',
+        }}
+      />
+      
+      {/* Inner gradient border glow */}
+      <div 
+        className="absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-500"
+        style={{
+          background: isHovering 
+            ? `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(147,51,234,0.15), transparent 40%)`
+            : 'none',
+          opacity: isHovering ? 1 : 0,
+        }}
+      />
+      
+      {/* Ripple effect */}
+      {ripplePosition && (
+        <span
+          className="absolute bg-white/30 rounded-full animate-ping z-20"
+          style={{
+            left: ripplePosition.x,
+            top: ripplePosition.y,
+            width: '100px',
+            height: '100px',
+            transform: 'translate(-50%, -50%)',
+            animation: 'ripple 0.6s ease-out forwards'
+          }}
+        />
+      )}
+      
+      {/* Content */}
+      <div className="relative z-10">
+        {children}
+      </div>
+    </button>
+  );
+};
+
+// Store Modal Component
+const StoreModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm">
+      <div className="relative bg-gradient-to-br from-purple-900/95 to-purple-800/95 rounded-3xl p-8 max-w-md w-full mx-4 shadow-[0_0_60px_rgba(147,51,234,0.5)] border border-purple-500/30">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors cursor-pointer"
+          aria-label="Close modal"
+        >
+          <X size={24} />
+        </button>
+
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-bold text-white mb-2">Download Empath</h2>
+          <p className="text-white/70">Choose your preferred app store</p>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <LiquidGlassButton
+            onClick={() => window.open('https://apps.apple.com/app/placeholder', '_blank')}
+            className="flex items-center justify-center px-4 py-3 !bg-black"
+          >
+            <img src="/iOS_store.svg" className="h-12 w-auto" alt="Download on the App Store" />
+          </LiquidGlassButton>
+          <LiquidGlassButton
+            onClick={() => window.open('https://play.google.com/store/apps/details?id=placeholder', '_blank')}
+            className="flex items-center justify-center px-4 py-3 !bg-black"
+          >
+            <img src="/android_play.svg" className="h-12 w-auto" alt="Get it on Google Play" />
+          </LiquidGlassButton>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Logo Component matching the new design
 const Logo = ({ size = 32, pulsing = false }) => {
   return (
@@ -381,8 +576,25 @@ const FeatureCard = ({ title, desc, icon: Icon, color }: { title: string; desc: 
 );
 
 const App = () => {
+  const [showStoreModal, setShowStoreModal] = useState(false);
+
+  const handleDownloadClick = () => {
+    const device = getDeviceType();
+    
+    if (device === 'ios') {
+      window.open('https://apps.apple.com/app/placeholder', '_blank');
+    } else if (device === 'android') {
+      window.open('https://play.google.com/store/apps/details?id=placeholder', '_blank');
+    } else {
+      setShowStoreModal(true);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#0c0c0e] text-white font-sans selection:bg-purple-500/30">
+      
+      {/* Store Modal */}
+      <StoreModal isOpen={showStoreModal} onClose={() => setShowStoreModal(false)} />
       
       {/* Navigation (Desktop) */}
       <nav className="hidden md:flex justify-between items-center px-10 py-6 max-w-7xl mx-auto">
@@ -396,9 +608,12 @@ const App = () => {
           <a href="#news" className="hover:text-white transition-colors">Latest news</a>
           <a href="#privacy" className="hover:text-white transition-colors">Privacy</a>
         </div>
-        <button className="bg-white text-black px-6 py-2 rounded-full font-bold text-sm hover:bg-gray-200 transition-colors">
+        <RippleButton
+          onClick={handleDownloadClick}
+          className="bg-white text-black px-6 py-2 rounded-full font-bold text-sm hover:bg-gray-200 transition-colors"
+        >
           Download Now
-        </button>
+        </RippleButton>
       </nav>
 
       {/* Hero Section */}
@@ -417,12 +632,18 @@ const App = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-            <button className="flex items-center justify-center bg-[#1c1c1e] border border-white/10 px-4 py-2 rounded-2xl hover:bg-[#2c2c2e] transition-all cursor-pointer">
+            <LiquidGlassButton
+              onClick={() => window.open('https://apps.apple.com/app/placeholder', '_blank')}
+              className="flex items-center justify-center px-4 py-2"
+            >
               <img src="/iOS_store.svg" className="h-12 w-auto" alt="Download on the App Store" />
-            </button>
-            <button className="flex items-center justify-center bg-[#1c1c1e] border border-white/10 px-4 py-2 rounded-2xl hover:bg-[#2c2c2e] transition-all cursor-pointer">
+            </LiquidGlassButton>
+            <LiquidGlassButton
+              onClick={() => window.open('https://play.google.com/store/apps/details?id=placeholder', '_blank')}
+              className="flex items-center justify-center px-4 py-2"
+            >
               <img src="/android_play.svg" className="h-12 w-auto" alt="Get it on Google Play" />
-            </button>
+            </LiquidGlassButton>
           </div>
         </div>
 
@@ -595,6 +816,18 @@ const App = () => {
       </footer>
 
       {/* Mobile Navigation (Floating) - Matches Screenshot Bottom Bar */}
+      <style>{`
+        @keyframes ripple {
+          0% {
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 1;
+          }
+          100% {
+            transform: translate(-50%, -50%) scale(4);
+            opacity: 0;
+          }
+        }
+      `}</style>
       <div className="md:hidden fixed bottom-6 left-6 right-6 bg-[#1c1c1e]/90 backdrop-blur-xl border border-white/10 rounded-full h-16 flex items-center justify-around px-4 z-50 shadow-2xl">
         <div className="flex flex-col items-center gap-1 text-purple-500">
           <Home size={20} />
