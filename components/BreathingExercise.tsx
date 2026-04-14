@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 
 const BreathingExercise = () => {
   const [phase, setPhase] = useState<'inhale' | 'hold1' | 'exhale' | 'hold2'>('inhale');
-  const [totalTimeRemaining, setTotalTimeRemaining] = useState(20);
+  const [totalTimeRemaining, setTotalTimeRemaining] = useState(12);
   const [isBreathing, setIsBreathing] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
@@ -35,7 +35,7 @@ const BreathingExercise = () => {
       const now = Date.now();
       phaseStartTimeRef.current = now;
       sessionStartTimeRef.current = now;
-      setTotalTimeRemaining(20);
+      setTotalTimeRemaining(12);
     }
   };
 
@@ -63,7 +63,7 @@ const BreathingExercise = () => {
       let elapsedInPhase = (now - phaseStartTimeRef.current) / 1000;
       
       const totalElapsedSeconds = Math.floor((now - sessionStartTimeRef.current) / 1000);
-      const remainingSeconds = Math.max(0, 20 - totalElapsedSeconds);
+      const remainingSeconds = Math.max(0, 12 - totalElapsedSeconds);
       
       setTotalTimeRemaining((prev) => {
         if (remainingSeconds !== prev) {
@@ -168,52 +168,54 @@ const BreathingExercise = () => {
   };
 
   return (
-    <div 
-      className="relative flex items-center justify-center cursor-pointer focus:outline-none"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onTouchStart={handleMouseEnter}
-      onTouchEnd={handleMouseLeave}
-      role="button"
-      aria-label="Box breathing exercise — hover or touch to begin"
-      tabIndex={0}
-      onFocus={handleMouseEnter}
-      onBlur={handleMouseLeave}
+    <div
+      className="relative flex items-center justify-center focus:outline-none"
     >
       {!isBreathing && (
         <>
-          <div className="w-64 h-64 bg-purple-600/20 rounded-full absolute" style={{ animation: 'ping 5s cubic-bezier(0, 0, 0.2, 1) infinite' }}></div>
-          <div className="w-48 h-48 bg-purple-600/40 rounded-full absolute" style={{ animation: 'pulse 10s cubic-bezier(0.4, 0, 0.6, 1) infinite' }}></div>
+          <div className="w-80 h-80 bg-indigo-500/20 rounded-full absolute pointer-events-none" style={{ animation: 'ping 5s cubic-bezier(0, 0, 0.2, 1) infinite' }}></div>
+          <div className="w-64 h-64 bg-indigo-500/40 rounded-full absolute pointer-events-none" style={{ animation: 'pulse 10s cubic-bezier(0.4, 0, 0.6, 1) infinite' }}></div>
         </>
-      )}
-      
-      {isBreathing && (
-        <>
-          <div 
-            ref={outerCircle1Ref}
-            className="w-64 h-64 bg-purple-600/20 rounded-full absolute"
-            style={{ transform: 'scale(1)' }}
-          />
-          <div 
-            ref={outerCircle2Ref}
-            className="w-48 h-48 bg-purple-600/40 rounded-full absolute"
-            style={{ transform: 'scale(1)' }}
-          />
-        </>
-      )}
-      
-      <div className="w-32 h-32 bg-purple-600 rounded-full shadow-[0_0_50px_rgba(147,51,234,0.6)]" />
-      
-      {isBreathing && (
-        <div className="absolute w-32 h-32 flex flex-col items-center justify-center text-white pointer-events-none" aria-live="polite">
-          <div className="text-2xl font-bold mb-1">{getPhaseText()}</div>
-          <div className="text-sm mt-1 opacity-60" role="timer" aria-label="Time remaining">{formatTime(totalTimeRemaining)}</div>
-        </div>
       )}
 
+      {isBreathing && (
+        <>
+          <div
+            ref={outerCircle1Ref}
+            className="w-80 h-80 bg-indigo-500/20 rounded-full absolute pointer-events-none"
+            style={{ transform: 'scale(1)' }}
+          />
+          <div
+            ref={outerCircle2Ref}
+            className="w-64 h-64 bg-indigo-500/40 rounded-full absolute pointer-events-none"
+            style={{ transform: 'scale(1)' }}
+          />
+        </>
+      )}
+
+      <div
+        className="w-40 h-40 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full shadow-[0_0_50px_rgba(99,102,241,0.6)] cursor-pointer hover:scale-105 transition-transform relative z-10 flex items-center justify-center"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onTouchStart={handleMouseEnter}
+        onTouchEnd={handleMouseLeave}
+        role="button"
+        aria-label="Box breathing exercise — hover or touch inner circle to begin"
+        tabIndex={0}
+        onFocus={handleMouseEnter}
+        onBlur={handleMouseLeave}
+      >
+        {isBreathing && (
+          <div className="flex flex-col items-center justify-center text-white pointer-events-none" aria-live="polite">
+            <div className="text-2xl font-bold mb-1">{getPhaseText()}</div>
+            <div className="text-sm mt-1 opacity-60" role="timer" aria-label="Time remaining">{formatTime(totalTimeRemaining)}</div>
+          </div>
+        )}
+      </div>
+
       {showCompletionModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm">
-          <div className="relative bg-gradient-to-br from-purple-900/90 to-purple-800/90 rounded-3xl p-8 max-w-md w-full mx-4 shadow-[0_0_60px_rgba(147,51,234,0.5)] border border-purple-500/30">
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm p-4">
+          <div className="relative bg-gradient-to-br from-purple-900/95 to-purple-800/95 rounded-3xl p-8 max-w-md w-full mx-4 shadow-[0_0_60px_rgba(147,51,234,0.5)] border border-purple-500/30">
             <button
               onClick={handleCloseModal}
               className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors cursor-pointer"
@@ -225,11 +227,11 @@ const BreathingExercise = () => {
             </button>
 
             <div className="text-center">
-              <h2 className="text-3xl font-bold text-white mb-4">Well Done!</h2>
-              <p className="text-white/80 text-lg mb-6">
+              <h2 className="text-2xl font-bold text-white mb-2">Well Done!</h2>
+              <p className="text-white/70 text-base mb-6">
                 Thank you for completing your breathing exercise session
               </p>
-              
+
               <div className="bg-black rounded-2xl p-6 border border-white/20">
                 <p className="text-white/60 text-sm mb-3 text-center">Your discount code:</p>
                 <button

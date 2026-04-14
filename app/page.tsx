@@ -56,7 +56,7 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0c0c0e] text-white font-sans selection:bg-purple-500/30">
+    <div className="min-h-screen bg-[#0a0a0f] text-white font-sans selection:bg-indigo-500/30">
       
       {/* Store Modal */}
       <StoreModal isOpen={showStoreModal} onClose={() => setShowStoreModal(false)} />
@@ -82,46 +82,47 @@ const App = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="px-6 pt-12 pb-20 max-w-7xl mx-auto text-center md:text-left md:flex md:items-center md:gap-12">
+      <section className="px-4 sm:px-6 pt-8 sm:pt-12 pb-16 sm:pb-20 max-w-7xl mx-auto text-center md:text-left md:flex md:items-center md:gap-12">
         <div className="md:flex-1">
           <div className="inline-flex items-center gap-2 bg-purple-500/10 border border-purple-500/20 px-3 py-1 rounded-full mb-6">
             <span className="w-2 h-2 bg-purple-500 rounded-full animate-ping"></span>
             <span className="text-xs font-bold text-purple-400 uppercase tracking-widest">Your Support Space</span>
           </div>
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 tracking-tight">
             Mental wellness, <br />
-            <span className="text-purple-500 italic">simplified.</span>
+            <span className="text-indigo-500 italic">simplified.</span>
           </h1>
-          <p className="text-gray-400 text-lg md:text-xl mb-10 max-w-xl leading-relaxed">
+          <p className="text-gray-400 text-base sm:text-lg md:text-xl mb-8 sm:mb-10 max-w-xl leading-relaxed">
             Everything here is private and stays on your device. Check in, reframe thoughts, and explore guided tools designed for your mind.
           </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-            <LiquidGlassButton
-              onClick={() => window.open('https://apps.apple.com/app/placeholder', '_blank')}
-              className="flex items-center justify-center px-4 py-2"
-            >
-              <img src="/iOS_store.svg" className="h-12 w-auto" alt="Download on the App Store" />
-            </LiquidGlassButton>
-            <LiquidGlassButton
-              onClick={() => window.open('https://play.google.com/store/apps/details?id=placeholder', '_blank')}
-              className="flex items-center justify-center px-4 py-2"
-            >
-              <img src="/android_play.svg" className="h-12 w-auto" alt="Get it on Google Play" />
-            </LiquidGlassButton>
-          </div>
         </div>
 
         {/* Breathing Exercise Circle */}
-        <div className="hidden md:flex flex-1 justify-center items-center relative">
-            <BreathingExercise />
+        <div className="flex flex-1 justify-center items-center relative mt-[100px] md:mt-0 mb-8 md:mb-0">
+          <BreathingExercise />
+        </div>
+
+        {/* Store Buttons */}
+        <div className="flex flex-col gap-4 justify-center md:justify-start mt-[100px] md:mt-0">
+          <LiquidGlassButton
+            onClick={() => window.open('https://apps.apple.com/app/placeholder', '_blank')}
+            className="flex items-center justify-center px-4 py-2"
+          >
+            <img src="/iOS_store.svg" className="h-12 w-auto" alt="Download on the App Store" />
+          </LiquidGlassButton>
+          <LiquidGlassButton
+            onClick={() => window.open('https://play.google.com/store/apps/details?id=placeholder', '_blank')}
+            className="flex items-center justify-center px-4 py-2"
+          >
+            <img src="/android_play.svg" className="h-12 w-auto" alt="Get it on Google Play" />
+          </LiquidGlassButton>
         </div>
       </section>
 
       {/* App Screenshot Grid - Emulating "For Today" section */}
-      <section id="features" className="px-6 py-20 max-w-7xl mx-auto bg-gradient-to-b from-transparent to-purple-900/10 rounded-[2rem]">
-        <h2 className="text-3xl font-bold mb-12 text-center">Powerful Tools at Your Fingertips</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <section id="features" className="px-4 sm:px-6 py-16 sm:py-20 max-w-7xl mx-auto bg-gradient-to-b from-transparent to-indigo-900/10 rounded-[2rem]">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-8 sm:mb-12 text-center">Powerful Tools at Your Fingertips</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             <FeatureCard 
               title="Check In" 
               desc="Name how you're feeling and build daily self-awareness." 
@@ -150,17 +151,17 @@ const App = () => {
       </section>
 
       {/* Library Highlights */}
-      <section id="library" className="px-6 py-20 max-w-7xl mx-auto">
-        <div className="flex justify-between items-end mb-10">
+      <section id="library" className="px-4 sm:px-6 py-16 sm:py-20 max-w-7xl mx-auto">
+        <div className="flex justify-between items-end mb-8 sm:mb-10">
           <div>
-            <p className="text-purple-400 font-bold text-sm uppercase mb-2 tracking-widest">Explore Tools</p>
-            <h2 className="text-4xl font-bold">Featured in Library</h2>
+            <p className="text-indigo-400 font-bold text-xs sm:text-sm uppercase mb-2 tracking-widest">Explore Tools</p>
+            <h2 className="text-3xl sm:text-4xl font-bold">Featured in Library</h2>
           </div>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-purple-600 p-8 rounded-[2rem] min-h-[300px] flex flex-col justify-end group cursor-pointer overflow-hidden relative">
-            <Wind className="absolute top-10 right-10 opacity-20 group-hover:scale-125 transition-transform" size={120} />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+          <div className="bg-gradient-to-br from-indigo-600 to-purple-600 p-6 sm:p-8 rounded-[2rem] min-h-[280px] sm:min-h-[300px] flex flex-col justify-end group cursor-pointer overflow-hidden relative">
+            <Wind className="absolute top-8 sm:top-10 right-8 sm:right-10 opacity-20 group-hover:scale-125 transition-transform" size={120} />
             <span className="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold w-fit mb-4">Grounding · 3 min</span>
             <h3 className="text-3xl font-bold leading-tight">5-4-3-2-1 Grounding <br/>Technique</h3>
             <ChevronRight className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -192,8 +193,8 @@ const App = () => {
       </section>
 
       {/* Privacy Message */}
-      <section id="privacy" className="max-w-7xl mx-auto px-6 mb-16">
-        <div className="px-6 py-10 bg-[#1c1c1e] rounded-[2rem]">
+      <section id="privacy" className="max-w-7xl mx-auto px-4 sm:px-6 mb-12 sm:mb-16">
+        <div className="px-4 sm:px-6 py-8 sm:py-10 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem]">
           <div className="max-w-4xl flex items-center gap-6">
             <Logo size={64} pulsing={false} />
             <div>
@@ -207,13 +208,13 @@ const App = () => {
       </section>
 
       {/* Latest News */}
-      <section id="news" className="px-6 py-20 max-w-7xl mx-auto">
-        <div className="mb-10">
-          <p className="text-purple-400 font-bold text-sm uppercase mb-2 tracking-widest">Mental Health & AI</p>
-          <h2 className="text-4xl font-bold">Latest News & Research</h2>
+      <section id="news" className="px-4 sm:px-6 py-16 sm:py-20 max-w-7xl mx-auto">
+        <div className="mb-8 sm:mb-10">
+          <p className="text-indigo-400 font-bold text-xs sm:text-sm uppercase mb-2 tracking-widest">Mental Health & AI</p>
+          <h2 className="text-3xl sm:text-4xl font-bold">Latest News & Research</h2>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           <LiquidGlassCard className="p-6 cursor-pointer group">
             <a href="https://www.apa.org/monitor/2026/01-02/trends-personalized-mental-health-care" target="_blank" rel="noopener noreferrer" className="block">
               <p className="text-xs font-bold text-green-400 uppercase mb-3">Clinical Trial</p>
@@ -271,7 +272,7 @@ const App = () => {
       </section>
 
       {/* Footer */}
-      <footer className="px-6 py-12 border-t border-white/5 text-center text-gray-500 text-sm">
+      <footer className="px-4 sm:px-6 py-8 sm:py-12 border-t border-white/5 text-center text-gray-500 text-xs sm:text-sm">
         <p className="mb-4">© 2026 Empath Project. All rights reserved.</p>
         <div className="flex justify-center gap-6">
           <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
@@ -293,14 +294,14 @@ const App = () => {
           }
         }
       `}</style>
-      <div className="md:hidden fixed bottom-6 left-6 right-6 bg-[#1c1c1e]/90 backdrop-blur-xl border border-white/10 rounded-full h-16 flex items-center justify-around px-4 z-50 shadow-2xl">
-        <div className="flex flex-col items-center gap-1 text-purple-500">
+      <div className="md:hidden fixed bottom-4 sm:bottom-6 left-4 right-4 sm:left-6 sm:right-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full h-16 flex items-center justify-around px-4 z-50 shadow-2xl">
+        <div className="flex flex-col items-center gap-1 text-indigo-500">
           <Home size={20} />
           <span className="text-[10px] font-bold">Home</span>
         </div>
         <div className="flex flex-col items-center gap-1 text-gray-500">
-          <div className="w-5 h-5 rounded-full bg-purple-600/30 flex items-center justify-center">
-            <div className="w-3 h-3 rounded-full bg-purple-500" />
+          <div className="w-5 h-5 rounded-full bg-indigo-600/30 flex items-center justify-center">
+            <div className="w-3 h-3 rounded-full bg-indigo-500" />
           </div>
           <span className="text-[10px] font-bold">Companion</span>
         </div>
