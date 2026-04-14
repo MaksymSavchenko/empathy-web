@@ -128,6 +128,19 @@ border: 1px solid rgba(255, 255, 255, 0.1);
 - **Icon Size**: `20px`
 - **Active State**: Indigo color with glow
 
+### Hero Section (Mobile)
+- **Order**: Text content → Breathing exercise → Store buttons
+- **Breathing Exercise**: `mt-[100px]` on mobile, `mt-0` on desktop
+- **Store Buttons**: `mt-[100px]` on mobile, `mt-0` on desktop
+- **Store Button Layout**: Vertical (flex-col) on all screen sizes
+- **Spacing**: px-4 on mobile, px-6 on tablet/desktop
+
+### Hero Section (Desktop)
+- **Order**: Text content (left) → Breathing exercise (right) → Store buttons (below text)
+- **Layout**: Flex row with gap-12
+- **Text Alignment**: Left-aligned
+- **Breathing Exercise**: Positioned to the right of text
+
 ### Feature Cards
 - **Padding**: `24px` (p-6)
 - **Background**: Glass morphism (via LiquidGlassCard)
@@ -139,9 +152,9 @@ border: 1px solid rgba(255, 255, 255, 0.1);
 
 ### Breathing Exercise
 - **Circle Sizes**:
-  - Outer: `256px` (w-64 h-64)
-  - Middle: `192px` (w-48 h-48)
-  - Inner: `128px` (w-32 h-32)
+  - Outer: `320px` (w-80 h-80)
+  - Middle: `256px` (w-64 h-64)
+  - Inner: `160px` (w-40 h-40)
 - **Animation**: Smooth scaling (4s per phase)
 - **Phases**: Inhale → Hold → Exhale → Hold
 - **Colors**: Indigo-500/20 and indigo-500/40 for outer circles, gradient for inner
@@ -149,20 +162,25 @@ border: 1px solid rgba(255, 255, 255, 0.1);
 - **Shadow**: `0 0 50px rgba(99, 102, 241, 0.6)`
 - **Timer**: Text-2xl for phase, text-sm for time remaining
 - **Total Duration**: 12 seconds
-- **Trigger**: Hover or touch
+- **Trigger**: Hover or touch on inner circle only
+- **Outer Circles**: `pointer-events-none` to prevent blocking inner circle events
+- **Text Position**: Inside inner circle with flex centering
 - **Component**: `BreathingExercise` in `components/BreathingExercise.tsx`
 
 ### Discount Code Modal
 - **Trigger**: After completing 12-second breathing exercise
-- **Background**: `rgba(255, 255, 255, 0.05)` with backdrop blur
-- **Border**: `1px solid rgba(255, 255, 255, 0.1)`
-- **Border Radius**: `16px` (rounded-2xl)
+- **Background**: `bg-gradient-to-br from-purple-900/95 to-purple-800/95` (purple gradient)
+- **Border**: `border-purple-500/30`
+- **Border Radius**: `24px` (rounded-3xl)
 - **Padding**: `32px` (p-8)
 - **Max Width**: `400px` (max-w-md)
-- **Shadow**: `0 0 60px rgba(99, 102, 241, 0.5)`
+- **Shadow**: `0 0 60px rgba(147, 51, 234, 0.5)` (purple glow)
 - **Discount Code**: "breath10"
 - **Copy Button**: White/20 background, rounded-xl, shows "Copied!" on success
 - **Close Button**: Top-right, white/60 hover white
+- **Title**: `text-2xl font-bold text-white mb-2`
+- **Subtitle**: `text-white/70 text-base mb-6`
+- **Matches**: StoreModal styling
 
 ### Store Modal
 - **Component**: `StoreModal` in `components/StoreModal.tsx`
@@ -311,9 +329,12 @@ module.exports = {
 ### Breathing Exercise
 ```tsx
 <BreathingExercise />
-// Auto-triggers on hover or touch
+// Triggers on inner circle hover or touch only
+// Outer circles have pointer-events-none
+// Text overlay positioned inside inner circle
 // Shows discount code modal after 12 seconds
 // Discount code: "breath10"
+// Circle sizes: w-80 (outer), w-64 (middle), w-40 (inner)
 ```
 
 ### Glass Card Component
@@ -342,6 +363,25 @@ module.exports = {
 <div className="md:hidden fixed bottom-4 sm:bottom-6 left-4 right-4 sm:left-6 sm:right-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full h-16 flex items-center justify-around px-4 z-50 shadow-2xl">
   {/* Navigation items */}
 </div>
+```
+
+### Hero Section (Mobile Layout)
+```tsx
+<section className="px-4 sm:px-6 pt-8 sm:pt-12 pb-16 sm:pb-20 max-w-7xl mx-auto text-center">
+  <div className="md:flex-1">
+    {/* Badge, heading, description */}
+  </div>
+
+  {/* Breathing Exercise - Mobile */}
+  <div className="flex flex-1 justify-center items-center relative mt-[100px] md:mt-0 mb-8 md:mb-0">
+    <BreathingExercise />
+  </div>
+
+  {/* Store Buttons - Mobile */}
+  <div className="flex flex-col gap-4 justify-center md:justify-start mt-[100px] md:mt-0">
+    {/* Store buttons */}
+  </div>
+</section>
 ```
 
 ## Design Tokens Summary
@@ -391,6 +431,10 @@ module.exports = {
 - Features: Phase animation, timer, discount code modal
 - Duration: 12 seconds total (4s per phase)
 - Discount Code: "breath10" (copy to clipboard)
+- Interaction: Triggers only on inner circle hover/touch
+- Outer circles: pointer-events-none to prevent blocking events
+- Text overlay: Positioned inside inner circle with flex centering
+- Circle sizes: 320px (outer), 256px (middle), 160px (inner)
 
 ## Design System Variables (CSS)
 
@@ -459,3 +503,30 @@ module.exports = {
 
 *Last updated: April 13, 2026*
 *Source: iPhone 17 Pro simulator screenshots*
+
+## Recent Implementation Updates (April 13, 2026)
+
+### Mobile Layout Improvements
+- Breathing exercise moved to appear after text content on mobile
+- Store buttons positioned below breathing exercise on mobile with 100px margin
+- Breathing exercise has 100px top margin on mobile for proper spacing
+- Store buttons vertically aligned on all screen sizes (flex-col)
+- Mobile navigation positioned at bottom with proper spacing
+
+### Breathing Exercise Enhancements
+- Circle sizes increased for better visual impact (320px, 256px, 160px)
+- Interaction restricted to inner circle hover/touch only
+- Outer circles have pointer-events-none to prevent blocking
+- Text overlay moved inside inner circle for proper visibility
+- Text uses flex centering for consistent positioning
+
+### Modal Styling Updates
+- "Well Done!" modal updated to match StoreModal purple gradient styling
+- Consistent purple theme across all modals
+- Improved visual hierarchy with proper spacing
+
+### Design System Documentation
+- Comprehensive component specifications added
+- Implementation examples for all major components
+- File locations and dependencies documented
+- CSS variables and design tokens defined

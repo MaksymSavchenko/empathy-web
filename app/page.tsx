@@ -295,28 +295,22 @@ const App = () => {
         }
       `}</style>
       <div className="md:hidden fixed bottom-4 sm:bottom-6 left-4 right-4 sm:left-6 sm:right-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full h-16 flex items-center justify-around px-4 z-50 shadow-2xl">
-        <div className="flex flex-col items-center gap-1 text-indigo-500">
+        <a href="#" className="flex flex-col items-center gap-1 text-indigo-500">
           <Home size={20} />
           <span className="text-[10px] font-bold">Home</span>
-        </div>
-        <div className="flex flex-col items-center gap-1 text-gray-500">
-          <div className="w-5 h-5 rounded-full bg-indigo-600/30 flex items-center justify-center">
-            <div className="w-3 h-3 rounded-full bg-indigo-500" />
-          </div>
-          <span className="text-[10px] font-bold">Companion</span>
-        </div>
-        <div className="flex flex-col items-center gap-1 text-gray-500">
+        </a>
+        <a href="#features" className="flex flex-col items-center gap-1 text-gray-500">
+          <RefreshCcw size={20} />
+          <span className="text-[10px] font-bold">Tools</span>
+        </a>
+        <a href="#library" className="flex flex-col items-center gap-1 text-gray-500">
           <BookOpen size={20} />
           <span className="text-[10px] font-bold">Library</span>
-        </div>
-        <div className="flex flex-col items-center gap-1 text-gray-500">
+        </a>
+        <a href="#news" className="flex flex-col items-center gap-1 text-gray-500">
           <MessageSquare size={20} />
-          <span className="text-[10px] font-bold">Journal</span>
-        </div>
-        <div className="flex flex-col items-center gap-1 text-gray-500">
-          <Settings size={20} />
-          <span className="text-[10px] font-bold">Settings</span>
-        </div>
+          <span className="text-[10px] font-bold">News</span>
+        </a>
       </div>
     </div>
   );
