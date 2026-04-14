@@ -56,7 +56,7 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-white font-sans selection:bg-indigo-500/30">
+    <div className="min-h-screen bg-[#0a0a0f] text-white font-sans selection:bg-indigo-500/30 overflow-x-hidden">
       
       {/* Store Modal */}
       <StoreModal isOpen={showStoreModal} onClose={() => setShowStoreModal(false)} />
