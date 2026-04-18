@@ -1,22 +1,32 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next'
+import { Geist, Geist_Mono } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
+import './globals.css'
+
+const _geist = Geist({ subsets: ["latin"] });
+const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Empath - Mental Wellness Simplified",
-  description: "Your private mental wellness companion. Check in, reframe thoughts, and explore guided tools designed for your mind.",
+  title: 'Empath - Your Wellness Companion',
+  description: 'A private, on-device wellness and self-reflection app. Build self-awareness with AI-powered tools for grounding, anxiety relief, and daily check-ins.',
+  generator: 'v0.app',
   icons: {
-    icon: "/favicon.svg",
+    icon: '/logo.png',
+    apple: '/logo.png',
   },
-};
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en" className="bg-background">
+      <body className="font-sans antialiased bg-background text-foreground">
+        {children}
+        {process.env.NODE_ENV === 'production' && <Analytics />}
+      </body>
     </html>
-  );
+  )
 }
