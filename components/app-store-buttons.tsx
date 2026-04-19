@@ -2,12 +2,15 @@
 
 import Image from "next/image"
 
+const APP_STORE_URL = "https://apps.apple.com/us/search?term=empath"
+const GOOGLE_PLAY_URL = "https://play.google.com/store/search?q=empath&c=apps"
+
 export function AppStoreButtons() {
   return (
     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
       {/* Apple App Store Button */}
       <a
-        href="https://apps.apple.com"
+        href={APP_STORE_URL}
         target="_blank"
         rel="noopener noreferrer"
         className="rainbow-border rounded-lg transition-transform duration-300 hover:scale-105"
@@ -17,13 +20,13 @@ export function AppStoreButtons() {
           alt="Download on the App Store"
           width={120}
           height={40}
-          className="h-[40px] w-auto"
+          className="rounded-lg"
         />
       </a>
 
       {/* Google Play Store Button */}
       <a
-        href="https://play.google.com"
+        href={GOOGLE_PLAY_URL}
         target="_blank"
         rel="noopener noreferrer"
         className="rainbow-border rounded-lg transition-transform duration-300 hover:scale-105"
@@ -33,7 +36,7 @@ export function AppStoreButtons() {
           alt="Get it on Google Play"
           width={135}
           height={40}
-          className="h-[40px] w-auto"
+          className="rounded-lg"
         />
       </a>
     </div>

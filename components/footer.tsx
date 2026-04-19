@@ -1,11 +1,12 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { AppStoreButtons } from "./app-store-buttons"
 
 export function Footer() {
   return (
-    <footer id="privacy" className="py-20 px-4">
+    <footer className="py-20 px-4">
       <div className="max-w-4xl mx-auto">
         {/* CTA Section */}
         <div className="text-center mb-16">
@@ -37,8 +38,8 @@ export function Footer() {
             <div className="flex items-center gap-6 text-sm text-muted-foreground">
               <a href="#news" className="hover:text-foreground transition-colors">Latest News</a>
               <a href="#privacy" className="hover:text-foreground transition-colors">Privacy</a>
-              <a href="#" className="hover:text-foreground transition-colors">Terms</a>
-              <a href="#" className="hover:text-foreground transition-colors">Support</a>
+              <Link href="/terms" className="hover:text-foreground transition-colors">Terms</Link>
+              <Link href="/support" className="hover:text-foreground transition-colors">Support</Link>
             </div>
 
             {/* Copyright */}

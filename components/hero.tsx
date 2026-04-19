@@ -2,10 +2,11 @@
 
 import { Heart, Shield, Sparkles } from "lucide-react"
 import { AppStoreButtons } from "./app-store-buttons"
+import BreathingExercise from "./breathing-exercise"
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-20 overflow-hidden">
+    <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-20">
       {/* Background gradient effects */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-primary/20 via-transparent to-transparent rounded-full blur-3xl animate-pulse-glow" />
@@ -51,6 +52,9 @@ export function Hero() {
         {/* App Store Buttons */}
         <AppStoreButtons />
       </div>
+
+      {/* Breathing Exercise */}
+      <BreathingExercise />
     </section>
   )
 }
