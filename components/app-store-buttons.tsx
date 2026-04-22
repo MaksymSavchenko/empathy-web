@@ -18,7 +18,7 @@ export function AppStoreButtons() {
         <Image
           src="/app-store-badge.svg"
           alt="Download on the App Store"
-          width={120}
+          width={136}
           height={40}
           className="rounded-lg"
         />
@@ -34,7 +34,7 @@ export function AppStoreButtons() {
         <Image
           src="/google-play-badge.svg"
           alt="Get it on Google Play"
-          width={135}
+          width={136}
           height={40}
           className="rounded-lg"
         />

@@ -1,30 +1,28 @@
-"use client"
-
 import Image from "next/image"
 
 const screenshots = [
   {
-    src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-04-17%20at%2020.44.20-vMfg6WtMuJkb1Wqm8VlA82GjLMR23n.png",
+    src: "/screenshots/home.png",
     alt: "Home - Daily Check-in",
     label: "Home"
   },
   {
-    src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-04-17%20at%2020.44.39-RayNWC7aR8fQL2ob3gthyYQiQxMS68.png",
+    src: "/screenshots/companion.png",
     alt: "AI Companion",
     label: "Companion"
   },
   {
-    src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-04-17%20at%2020.44.46-pKaTL3MIzagId7wo7jRdYotkmKXhzT.png",
+    src: "/screenshots/library.png",
     alt: "Library - Wellness Tools",
     label: "Library"
   },
   {
-    src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-04-17%20at%2020.44.54-2Lt10dk4Nlg0lkO6vMGhKHcuABVXfu.png",
+    src: "/screenshots/tools.png",
     alt: "All Tools",
     label: "Tools"
   },
   {
-    src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Simulator%20Screenshot%20-%20iPhone%2017%20Pro%20-%202026-04-17%20at%2020.45.03-it8zrrqvOw2s4WCIcK3aqaB9YjNRrT.png",
+    src: "/screenshots/settings.png",
     alt: "Settings",
     label: "Settings"
   },
@@ -64,8 +62,9 @@ export function AppScreenshots() {
                     <Image
                       src={screenshot.src}
                       alt={screenshot.alt}
-                      width={390}
-                      height={844}
+                      width={1206}
+                      height={2622}
+                      sizes="(min-width: 768px) 18rem, 16rem"
                       className="w-full h-auto"
                     />
                   </div>
