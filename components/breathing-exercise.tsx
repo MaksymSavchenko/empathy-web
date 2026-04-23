@@ -6,11 +6,9 @@ type BreathPhase = "inhale" | "hold1" | "exhale" | "hold2";
 
 const PHASE_SEQUENCE: BreathPhase[] = ["inhale", "hold1", "exhale", "hold2"];
 const PHASE_DURATION_MS = 4000;
-const PHASE_COMPLETION_HOLD_MS = 120;
-const PHASE_TRANSITION_BLEND_MS = 500;
 const TOTAL_SESSION_SECONDS = 16;
-const SVG_SIZE = 320;
-const RING_RADIUS = 120;
+const SVG_SIZE = 160;
+const RING_RADIUS = 60;
 
 const easeInOutSine = (t: number) => -(Math.cos(Math.PI * t) - 1) / 2;
 
@@ -54,7 +52,6 @@ const describeArc = (cx: number, cy: number, radius: number, startAngle: number,
 const BreathingExercise = () => {
   const [phase, setPhase] = useState<BreathPhase>("inhale");
   const [stageProgress, setStageProgress] = useState(0);
-  const [outgoingRingOpacity, setOutgoingRingOpacity] = useState(0);
   const [orbScale, setOrbScale] = useState(1);
   const [totalTimeRemaining, setTotalTimeRemaining] = useState(TOTAL_SESSION_SECONDS);
   const [isBreathing, setIsBreathing] = useState(false);
@@ -66,7 +63,6 @@ const BreathingExercise = () => {
   const isBreathingRef = useRef(false);
   const phaseRef = useRef<BreathPhase>("inhale");
   const phaseStartTimeRef = useRef(0);
-  const phaseTransitionStartedAtRef = useRef<number | null>(null);
   const sessionStartTimeRef = useRef(0);
   const shouldFinishOnInhaleRef = useRef(false);
 
@@ -78,11 +74,9 @@ const BreathingExercise = () => {
   const resetVisualState = () => {
     setPhase("inhale");
     setStageProgress(0);
-    setOutgoingRingOpacity(0);
     setOrbScale(1);
     setTotalTimeRemaining(TOTAL_SESSION_SECONDS);
     phaseRef.current = "inhale";
-    phaseTransitionStartedAtRef.current = null;
     shouldFinishOnInhaleRef.current = false;
   };
 
@@ -109,11 +103,26 @@ const BreathingExercise = () => {
 
     setPhase("inhale");
     setStageProgress(0.01);
-    setOutgoingRingOpacity(0);
     setOrbScale(1);
     setTotalTimeRemaining(TOTAL_SESSION_SECONDS);
     shouldFinishOnInhaleRef.current = false;
     setBreathingState(true);
+  };
+
+  const handleMouseEnter = () => {
+    startBreathingSession();
+  };
+
+  const handleMouseLeave = () => {
+    stopBreathingSession();
+  };
+
+  const handleClick = () => {
+    if (isBreathingRef.current) {
+      stopBreathingSession();
+    } else {
+      startBreathingSession();
+    }
   };
 
   useEffect(() => {
@@ -146,9 +155,7 @@ const BreathingExercise = () => {
         setBreathingState(false);
         setPhase("inhale");
         setStageProgress(1);
-        setOutgoingRingOpacity(0);
         setOrbScale(1.2);
-        phaseTransitionStartedAtRef.current = null;
 
         if (!hasShownModal) {
           setHasShownModal(true);
@@ -159,13 +166,12 @@ const BreathingExercise = () => {
         return;
       }
 
-      while (elapsedInPhaseMs >= PHASE_DURATION_MS + PHASE_COMPLETION_HOLD_MS) {
+      while (elapsedInPhaseMs >= PHASE_DURATION_MS) {
         const currentIndex = PHASE_SEQUENCE.indexOf(phaseRef.current);
         const nextPhase = PHASE_SEQUENCE[(currentIndex + 1) % PHASE_SEQUENCE.length];
 
         phaseRef.current = nextPhase;
-        phaseStartTimeRef.current += PHASE_DURATION_MS + PHASE_COMPLETION_HOLD_MS;
-        phaseTransitionStartedAtRef.current = now;
+        phaseStartTimeRef.current += PHASE_DURATION_MS;
         setPhase(nextPhase);
         elapsedInPhaseMs = now - phaseStartTimeRef.current;
       }
@@ -190,21 +196,7 @@ const BreathingExercise = () => {
           break;
       }
 
-      let nextOutgoingRingOpacity = 0;
-
-      if (phaseTransitionStartedAtRef.current !== null) {
-        const transitionElapsedMs = now - phaseTransitionStartedAtRef.current;
-
-        if (transitionElapsedMs < PHASE_TRANSITION_BLEND_MS) {
-          const transitionProgress = transitionElapsedMs / PHASE_TRANSITION_BLEND_MS;
-          nextOutgoingRingOpacity = 1 - easeInOutSine(transitionProgress);
-        } else {
-          phaseTransitionStartedAtRef.current = null;
-        }
-      }
-
       setStageProgress(progress);
-      setOutgoingRingOpacity(nextOutgoingRingOpacity);
       setOrbScale(nextScale);
       animationFrameRef.current = requestAnimationFrame(animate);
     };
@@ -233,15 +225,21 @@ const BreathingExercise = () => {
     }
   };
 
-  const isStageComplete = stageProgress >= 0.999;
   const startAngle = -90;
-  const endAngle = startAngle + Math.min(stageProgress, 0.999) * 359.9;
+  const endAngle = startAngle + Math.min(stageProgress, 1) * 359.9;
   const arcStart = polarToCartesian(SVG_SIZE / 2, SVG_SIZE / 2, RING_RADIUS, startAngle);
   const arcEnd = polarToCartesian(SVG_SIZE / 2, SVG_SIZE / 2, RING_RADIUS, endAngle);
   const arcPath =
-    stageProgress > 0.005 && !isStageComplete
+    stageProgress > 0.005
       ? describeArc(SVG_SIZE / 2, SVG_SIZE / 2, RING_RADIUS, startAngle, endAngle)
       : "";
+
+  // Fade out arc in final 15% of phase to smooth phase transitions
+  const FADE_THRESHOLD = 0.85;
+  const arcOpacity =
+    stageProgress > FADE_THRESHOLD
+      ? (1 - stageProgress) / (1 - FADE_THRESHOLD)
+      : 1;
 
   return (
     <>
@@ -249,15 +247,14 @@ const BreathingExercise = () => {
         <button
           type="button"
           className="group flex flex-col items-center bg-transparent p-0 focus:outline-none"
-          onMouseEnter={startBreathingSession}
-          onMouseLeave={stopBreathingSession}
-          onTouchStart={startBreathingSession}
-          onTouchEnd={stopBreathingSession}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onClick={handleClick}
           onFocus={startBreathingSession}
           onBlur={stopBreathingSession}
           aria-label="Box breathing exercise. Hover or tap to begin."
         >
-          <div className="relative flex h-[320px] w-[320px] items-center justify-center sm:h-[360px] sm:w-[360px]">
+          <div className="relative flex h-[160px] w-[160px] items-center justify-center sm:h-[180px] sm:w-[180px]">
             <div className="absolute inset-10 rounded-full bg-[radial-gradient(circle,rgba(47,192,185,0.22)_0%,rgba(20,44,51,0.12)_45%,transparent_72%)] blur-3xl" />
 
             <svg
@@ -281,9 +278,9 @@ const BreathingExercise = () => {
                   y2={arcEnd.y}
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop offset="0%" stopColor="#3fe6de" stopOpacity="0.98" />
+                  <stop offset="0%" stopColor="#3fe6de" stopOpacity="0" />
                   <stop offset="55%" stopColor="#3fe6de" stopOpacity="0.52" />
-                  <stop offset="100%" stopColor="#3fe6de" stopOpacity="0.12" />
+                  <stop offset="100%" stopColor="#3fe6de" stopOpacity="0.98" />
                 </linearGradient>
               </defs>
 
@@ -296,38 +293,12 @@ const BreathingExercise = () => {
                 strokeWidth="5"
               />
 
-              {isStageComplete && (
-                <circle
-                  cx={SVG_SIZE / 2}
-                  cy={SVG_SIZE / 2}
-                  r={RING_RADIUS}
-                  fill="none"
-                  stroke="#3fe6de"
-                  strokeOpacity="0.96"
-                  strokeWidth="6"
-                  filter="url(#breathing-progress-glow)"
-                />
-              )}
-
-              {outgoingRingOpacity > 0.001 && (
-                <circle
-                  cx={SVG_SIZE / 2}
-                  cy={SVG_SIZE / 2}
-                  r={RING_RADIUS}
-                  fill="none"
-                  stroke="#3fe6de"
-                  strokeOpacity={0.96 * outgoingRingOpacity}
-                  strokeWidth="6"
-                  filter="url(#breathing-progress-glow)"
-                />
-              )}
-
               {arcPath && (
                 <path
                   d={arcPath}
                   fill="none"
                   stroke="url(#breathing-stage-gradient)"
-                  strokeOpacity={1 - outgoingRingOpacity * 0.2}
+                  strokeOpacity={arcOpacity}
                   strokeWidth="6"
                   strokeLinecap="round"
                   filter="url(#breathing-progress-glow)"
@@ -336,7 +307,7 @@ const BreathingExercise = () => {
             </svg>
 
             <div
-              className="relative h-[176px] w-[176px] rounded-full border border-[#8de7e4]/35 transition-transform duration-150 will-change-transform sm:h-[200px] sm:w-[200px]"
+              className="relative h-[88px] w-[88px] rounded-full border border-[#8de7e4]/35 transition-transform duration-150 will-change-transform sm:h-[100px] sm:w-[100px]"
               style={{
                 transform: `scale(${orbScale})`,
                 background:

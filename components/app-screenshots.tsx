@@ -45,7 +45,7 @@ export function AppScreenshots() {
 
         {/* Screenshots carousel */}
         <div className="relative">
-          <div className="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-hide">
+          <div className="flex gap-6 overflow-x-auto pt-8 pb-8 snap-x snap-mandatory scrollbar-hide">
             {screenshots.map((screenshot, index) => (
               <div
                 key={index}
@@ -54,10 +54,7 @@ export function AppScreenshots() {
               >
                 <div className="relative group">
                   {/* Phone frame */}
-                  <div className="relative w-64 md:w-72 rounded-[2.5rem] overflow-hidden border-[8px] border-secondary bg-card shadow-2xl transition-transform duration-500 hover:scale-105 animate-float" style={{ animationDelay: `${index * 0.5}s` }}>
-                    {/* Notch */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-secondary rounded-b-2xl z-10" />
-                    
+                  <div className="relative w-64 md:w-72 rounded-[2.5rem] border-[8px] border-secondary bg-card shadow-2xl transition-transform duration-500 hover:scale-105 animate-float" style={{ animationDelay: `${index * 0.5}s` }}>
                     {/* Screenshot */}
                     <Image
                       src={screenshot.src}
@@ -65,7 +62,7 @@ export function AppScreenshots() {
                       width={1206}
                       height={2622}
                       sizes="(min-width: 768px) 18rem, 16rem"
-                      className="w-full h-auto"
+                      className="w-full h-auto rounded-[2rem] object-contain block"
                     />
                   </div>
 
